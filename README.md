@@ -1,16 +1,4 @@
-# chat_app
+# Firebase Daily Task
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Photo
+![Screenshot 2024-08-08 123945](https://github.com/user-attachments/assets/d3e47bbc-4d05-471a-af76-7608c5317637)
