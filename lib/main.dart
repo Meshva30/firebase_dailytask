@@ -24,6 +24,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: GoogleSignInServices.googleSignInServices.currentUser() == null
             ? Authscreen()
-            : HomeScreen());
+            : const HomeScreen());
   }
 }

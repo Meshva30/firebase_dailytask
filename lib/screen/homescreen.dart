@@ -2,6 +2,7 @@ import 'package:chat_app/screen/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+
 import '../controller/auth_controller.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthController controller = Get.put(AuthController());
+
     return Scaffold(
       drawer: Drawer(
         child: Column(
@@ -18,15 +20,19 @@ class HomeScreen extends StatelessWidget {
               child: Obx(
                 () => CircleAvatar(
                   radius: 70,
-                  backgroundImage: NetworkImage(controller.url.value),
+                  backgroundImage: controller.url.value.isNotEmpty
+                      ? NetworkImage(controller.url.value)
+                      : const AssetImage('')
+
                 ),
               ),
             ),
-            Obx(() => Text(
-                  controller.email.value,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )),
-            Obx(() => Text(controller.name.value)),
+            Obx(() => Text(controller.email.value.isNotEmpty
+                ? controller.email.value
+                : 'No email')),
+            Obx(() => Text(controller.name.value.isNotEmpty
+                ? controller.name.value
+                : 'No name')),
           ],
         ),
       ),
@@ -35,24 +41,22 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Home Screen'),
         actions: [
           IconButton(
-              onPressed: () {
-                controller.emailLogOut();
-                Fluttertoast.showToast(
-                  msg: "Logged out successfully",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Authscreen(),
-                    ));
-              },
-              icon: const Icon(Icons.logout))
+            onPressed: () {
+              controller.emailLogOut();
+              Fluttertoast.showToast(
+                msg: "Logged out successfully",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.black,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+              Get.off(
+                  () => Authscreen());
+            },
+            icon: const Icon(Icons.logout),
+          ),
         ],
       ),
       body: const Center(
