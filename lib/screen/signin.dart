@@ -1,5 +1,10 @@
 import 'package:chat_app/controller/auth_controller.dart';
+
+import 'package:chat_app/screen/signup.dart';
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class Authscreen extends StatelessWidget {
   @override
@@ -10,13 +15,13 @@ class Authscreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "Login",
               style: TextStyle(
-                  fontSize: 50,
+                  fontSize: 30,
                   color: Colors.white,
                   fontWeight: FontWeight.bold),
             ),
@@ -27,24 +32,21 @@ class Authscreen extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                height: 60,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(color: Colors.grey, width: 2)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/google.png"),
-                    Text(
-                      "Sign in with Google",
-                      style: TextStyle(fontSize: 15, color: Colors.white),
-                    )
-                  ],
-                ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(color: Colors.grey, width: 2)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/google.png"),
+                  Text(
+                    "Sign in with Google",
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  )
+                ],
               ),
             ),
             SizedBox(
@@ -95,7 +97,7 @@ class Authscreen extends StatelessWidget {
             SizedBox(height: 50),
             InkWell(
               onTap: () {
-                controller.Signup(
+                controller.signIn(
                     controller.txtemail.text, controller.txtpassword.text);
               },
               child: Container(
@@ -103,16 +105,35 @@ class Authscreen extends StatelessWidget {
                 height: 50,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xffE50BFF),
+                  color: Colors.indigo,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
                     child: Text("Login",
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 25,
+                            fontSize: 21,
                             fontWeight: FontWeight.w500))),
               ),
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have an account?",
+                  style: TextStyle(color: Colors.grey),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.to(Signup());
+                  },
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(color: Color(0xFF40744D)),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
