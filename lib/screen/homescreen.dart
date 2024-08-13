@@ -14,28 +14,7 @@ class HomeScreen extends StatelessWidget {
     AuthController controller = Get.put(AuthController());
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          UserServices.userServices.addUser(controller.txtemail.text);
-        },
-        child: Icon(Icons.add),
-      ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            DrawerHeader(
-              child: Obx(
-                () => CircleAvatar(
-                  radius: 70,
-                  backgroundImage: NetworkImage(controller.url.value),
-                ),
-              ),
-            ),
-            Obx(() => Text(controller.email.value)),
-            Obx(() => Text(controller.name.value)),
-          ],
-        ),
-      ),
+      drawer: Drawer(),
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Home Screen'),
@@ -63,7 +42,8 @@ class HomeScreen extends StatelessWidget {
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: UserServices.userServices.getUser(),
+                stream:
+                    UserServices.userServices.getUser(controller.email.value),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     return Center(
@@ -78,8 +58,6 @@ class HomeScreen extends StatelessWidget {
                   }
 
                   if (snapshot.hasData) {
-
-
                     List userlist =
                         snapshot.data!.docs.map((e) => e.data()).toList();
 
@@ -89,8 +67,13 @@ class HomeScreen extends StatelessWidget {
                         var user = userlist[index];
 
                         return ListTile(
-                          title: Text(user['Name'] ?? 'No Name'),
-                          subtitle: Text(user['Email'] ?? 'No Email'),
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(user['photourl']),
+                          ),
+                          title: Text(user['name'] ?? 'No Name'),
+                          subtitle: Text(
+                            '${user['email'] ?? 'No Email'} \n ${user['phone'] ?? 'No Phone'}',
+                          ),
                         );
                       },
                     );

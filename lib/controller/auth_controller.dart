@@ -10,15 +10,17 @@ import '../screen/homescreen.dart';
 class AuthController extends GetxController {
   TextEditingController txtemail = TextEditingController();
   TextEditingController txtpassword = TextEditingController();
+  TextEditingController txtname = TextEditingController();
+  TextEditingController txtphone = TextEditingController();
 
   RxString email = ''.obs;
   RxString name = ''.obs;
   RxString url = ''.obs;
 
+
   @override
   void onInit() {
     super.onInit();
-    UserDetails();
   }
 
   void UserDetails() {
@@ -27,6 +29,7 @@ class AuthController extends GetxController {
       email.value = user.email ?? ''; 
       url.value = user.photoURL ?? '';
       name.value = user.displayName ?? '';
+
     }
   }
 

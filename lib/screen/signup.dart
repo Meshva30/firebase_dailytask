@@ -1,6 +1,9 @@
 import 'package:chat_app/controller/auth_controller.dart';
 import 'package:chat_app/firebase_services/google_services.dart';
+import 'package:chat_app/firebase_services/user_services.dart';
+import 'package:chat_app/model/firebase_model.dart';
 import 'package:chat_app/screen/signin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -18,11 +21,14 @@ class Signup extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Center(
           child: SingleChildScrollView(
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
                 "Sign up",
                 style: TextStyle(
-                    fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
               Text(
                 "see your growth and get consulting suppor!",
@@ -35,12 +41,24 @@ class Signup extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GestureDetector(
                   onTap: () async {
-                    String status = await GoogleSignInServices.googleSignInServices
+                    String status = await GoogleSignInServices
+                        .googleSignInServices
                         .signWithGoogle();
+
+                    User? user =
+                        GoogleSignInServices.googleSignInServices.currentUser();
+
+                    Map m1 = {
+                      'name': user!.displayName,
+                      'email': user.email,
+                      'photourl': user.photoURL,
+                    };
+                    UserModel userModel = UserModel.fromMap(m1);
+                    await UserServices.userServices.addUser(userModel);
+
                     Fluttertoast.showToast(msg: status);
                     if (status == 'Success') {
                       Get.to(const HomeScreen());
-                      controller.UserDetails();
                     }
                   },
                   child: Container(
@@ -66,7 +84,7 @@ class Signup extends StatelessWidget {
                 height: 20,
               ),
               TextField(
-
+                controller: controller.txtname,
                 style: TextStyle(color: Colors.white),
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
@@ -75,6 +93,25 @@ class Signup extends StatelessWidget {
                   ),
                   labelText: 'Name',
                   hintText: 'Name',
+                  hintStyle: TextStyle(color: Colors.white),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.grey)),
+                  labelStyle: TextStyle(color: Colors.white),
+                  helperStyle: TextStyle(color: Colors.white),
+                ),
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: controller.txtphone,
+                style: TextStyle(color: Colors.white),
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelText: 'Phone',
+                  hintText: 'Phone',
                   hintStyle: TextStyle(color: Colors.white),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -128,7 +165,19 @@ class Signup extends StatelessWidget {
               ),
               SizedBox(height: 50),
               InkWell(
-                onTap: () {
+                onTap: () async {
+                  Map m1 = {
+                    'name': controller.txtname.text,
+                    'phone': controller.txtphone.text,
+                    'email': controller.txtemail.text,
+                    'photourl':
+                        'https://i.pinimg.com/236x/db/b9/cb/dbb9cbe3b84da22c294f57cc7847977e.jpg',
+                  };
+                  UserModel usermodel = UserModel.fromMap(m1);
+                  await UserServices.userServices.addUser(usermodel);
+
+                  Get.off(HomeScreen());
+
                   controller.Signup(
                       controller.txtemail.text, controller.txtpassword.text);
                 },
