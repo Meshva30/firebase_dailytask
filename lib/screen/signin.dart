@@ -19,43 +19,43 @@ class Authscreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   "Login",
                   style: TextStyle(
                       fontSize: 31,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
                 ),
-                Text(
+                const Text(
                   "see your growth and get consulting suppor!",
                   style: TextStyle(color: Colors.white),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Container(
                   height: 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       border: Border.all(color: Colors.grey, width: 2)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset("assets/google.png"),
-                      Text(
+                      const Text(
                         "Sign in with Google",
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       )
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 TextField(
                   controller: controller.txtemail,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -63,18 +63,18 @@ class Authscreen extends StatelessWidget {
                     ),
                     labelText: 'Email',
                     hintText: 'abc@email.com',
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: const TextStyle(color: Colors.white),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey)),
-                    labelStyle: TextStyle(color: Colors.white),
-                    helperStyle: TextStyle(color: Colors.white),
+                        borderSide: const BorderSide(color: Colors.grey)),
+                    labelStyle: const TextStyle(color: Colors.white),
+                    helperStyle: const TextStyle(color: Colors.white),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   controller: controller.txtpassword,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   obscureText: true,
                   keyboardType: TextInputType.number,
                   obscuringCharacter: '*',
@@ -83,33 +83,33 @@ class Authscreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     hintText: 'min.8 character',
-                    hintStyle: TextStyle(color: Colors.white),
+                    hintStyle: const TextStyle(color: Colors.white),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey)),
-                    suffixIcon: Icon(
+                        borderSide: const BorderSide(color: Colors.grey)),
+                    suffixIcon: const Icon(
                       Icons.remove_red_eye,
                       color: Colors.grey,
                     ),
                     labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.white),
+                    labelStyle: const TextStyle(color: Colors.white),
                   ),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 InkWell(
                   onTap: () {
                     controller.signIn(
                         controller.txtemail.text, controller.txtpassword.text);
                   },
                   child: Container(
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     height: 50,
                     width: double.infinity,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.indigo,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: Center(
+                    child: const Center(
                         child: Text("Login",
                             style: TextStyle(
                                 color: Colors.white,
@@ -117,11 +117,11 @@ class Authscreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500))),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Don't have an account?",
                       style: TextStyle(color: Colors.grey),
                     ),

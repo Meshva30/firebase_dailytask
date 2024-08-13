@@ -66,7 +66,7 @@ class Signup extends StatelessWidget {
                 height: 20,
               ),
               TextField(
-                controller: controller.txtemail,
+
                 style: TextStyle(color: Colors.white),
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(

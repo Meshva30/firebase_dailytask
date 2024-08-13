@@ -18,21 +18,15 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    try {
-      UserDetails();
-    } catch (e) {
-      print('Error initializing user details: $e');
-    }
+    UserDetails();
   }
 
-
-
-  void UserDetails(){
+  void UserDetails() {
     User? user = GoogleSignInServices.googleSignInServices.currentUser();
     if (user != null) {
-      email.value = user.email!;
-      url.value = user.photoURL!;
-      name.value = user.displayName!;
+      email.value = user.email ?? ''; 
+      url.value = user.photoURL ?? '';
+      name.value = user.displayName ?? '';
     }
   }
 
@@ -40,26 +34,26 @@ class AuthController extends GetxController {
     try {
       bool emails = await AuthServices.authServices.CheckEmail(email);
       if (emails) {
-        Get.snackbar('Sign Up Failed',
+        Get.snackbar(
+          'Sign Up Failed',
           'Email already in use. Please use a different email.',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
-
-      }
-      else{
+      } else {
         await AuthServices.authServices.CreateAccount(email, password);
-        Get.snackbar('Sign Up', 'Sign Up Successfully',
+        Get.snackbar(
+          'Sign Up',
+          'Sign Up Successfully',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
       }
-
-    }catch(e)
-    {
-      Get.snackbar('Sign Up Failed',
+    } catch (e) {
+      Get.snackbar(
+        'Sign Up Failed',
         e.toString(),
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
@@ -67,30 +61,34 @@ class AuthController extends GetxController {
       );
     }
   }
-  Future<void>signIn(String email,String password)
-  async {
-    try{
+
+  Future<void> signIn(String email, String password) async {
+    try {
       User? user = await AuthServices.authServices.Signin(email, password);
-      if(user!=null)
-        {
-          Get.to(HomeScreen());
-        }
-      else{
-        Get.snackbar('Login Failed', 'Incorrect email or password.',
+      if (user != null) {
+        Get.to(HomeScreen());
+        UserDetails();
+      } else {
+        Get.snackbar(
+          'Login Failed',
+          'Incorrect email or password.',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
       }
-    }catch(e){
-      Get.snackbar('Login Failed', e.toString(),
+    } catch (e) {
+      Get.snackbar(
+        'Login Failed',
+        e.toString(),
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
     }
   }
-  void emailLogOut(){
+
+  void emailLogOut() {
     AuthServices.authServices.signout();
     GoogleSignInServices.googleSignInServices.emailLogOut();
   }
