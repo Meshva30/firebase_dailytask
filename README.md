@@ -174,4 +174,33 @@ https://github.com/user-attachments/assets/947f40ce-537c-4a56-a252-3a3032af1ba6
 
 ![Screenshot 2024-08-12 131055](https://github.com/user-attachments/assets/1b8260e9-8f1c-4712-b222-f9d55449a67c)
 
+## Add &  Read User in Cloud Firestore
+### **1. Project Setup**
+- **Add User to Firestore**: 
+  ```
+   Future<void> addUser(String userId, String name, String email, String phoneNumber) {
+  return FirebaseFirestore.instance.collection('users').doc(userId).set({
+    'name': name,
+    'email': email,
+    'phoneNumber': phoneNumber,
+  });
+  }
+   ```
+  - **Read User from Firestore**: 
+  ```
+  Future<void> getUser(String userId) async {
+  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  if (userDoc.exists) {
+    print(userDoc.data());
+  } else {
+    print("No such user!");
+  }
+  }
+
+  ```
+ ## video
+https://github.com/user-attachments/assets/b9c80de7-1227-41e0-9b9c-fdfaffa265f2
+
+![Screenshot 2024-08-13 182727](https://github.com/user-attachments/assets/f2d3b774-46f9-4cb4-9a46-3ec89277abf5)
+
 
