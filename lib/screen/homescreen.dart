@@ -1,4 +1,5 @@
 import 'package:chat_app/firebase_services/user_services.dart';
+import 'package:chat_app/screen/chat_screen.dart';
 import 'package:chat_app/screen/signin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -66,13 +67,19 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var user = userlist[index];
 
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(user['photourl']),
-                          ),
-                          title: Text(user['name'] ?? 'No Name'),
-                          subtitle: Text(
-                            '${user['email'] ?? 'No Email'} \n ${user['phone'] ?? 'No Phone'}',
+                        return GestureDetector(
+                          onTap: () {
+                            controller.getreceiver(userlist[index]['email']);
+                            Get.to(ChatScreen());
+                          },
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(user['photourl']),
+                            ),
+                            title: Text(user['name'] ?? 'No Name'),
+                            subtitle: Text(
+                              '${user['email'] ?? 'No Email'} \n ${user['phone'] ?? 'No Phone'}',
+                            ),
                           ),
                         );
                       },

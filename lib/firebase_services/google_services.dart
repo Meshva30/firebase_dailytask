@@ -39,13 +39,13 @@ class GoogleSignInServices{
 
   User? currentUser(){
     User? user = firebaseAuth.currentUser;
-    // if(user != null){
-    //   print(user.email);
-    //   print(user.displayName);
-    //   print(user.phoneNumber);
-    //   print(user.photoURL);
-    //
-    // }
+    if(user != null){
+      print(user.email);
+      print(user.displayName);
+      print(user.phoneNumber);
+      print(user.photoURL);
+
+    }
     return user;
   }
 }

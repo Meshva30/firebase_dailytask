@@ -15,7 +15,6 @@ class UserModel {
         name: m1['name'],
         phone: m1['phone'],
         email: m1['email'],
-
         photourl: m1['photourl']);
   }
   Map<String, String?> toMap(UserModel user)

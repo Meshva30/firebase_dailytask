@@ -12,24 +12,24 @@ class AuthController extends GetxController {
   TextEditingController txtpassword = TextEditingController();
   TextEditingController txtname = TextEditingController();
   TextEditingController txtphone = TextEditingController();
+  TextEditingController txtmessage = TextEditingController();
 
   RxString email = ''.obs;
   RxString name = ''.obs;
   RxString url = ''.obs;
+  RxString receiver = ''.obs;
 
 
-  @override
-  void onInit() {
-    super.onInit();
+  void getreceiver(String email) {
+    receiver.value = email;
   }
 
   void UserDetails() {
     User? user = GoogleSignInServices.googleSignInServices.currentUser();
     if (user != null) {
-      email.value = user.email ?? ''; 
-      url.value = user.photoURL ?? '';
-      name.value = user.displayName ?? '';
-
+      email.value = user.email!;
+      url.value = user.photoURL!;
+      name.value = user.displayName!;
     }
   }
 
