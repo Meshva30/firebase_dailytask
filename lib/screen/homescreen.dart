@@ -1,7 +1,9 @@
+import 'package:chat_app/firebase_services/google_services.dart';
 import 'package:chat_app/firebase_services/user_services.dart';
 import 'package:chat_app/screen/chat_screen.dart';
 import 'package:chat_app/screen/signin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -15,7 +17,38 @@ class HomeScreen extends StatelessWidget {
     AuthController controller = Get.put(AuthController());
 
     return Scaffold(
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: FutureBuilder(
+          future: UserServices.userServices.getcurrentuser(
+            GoogleSignInServices.googleSignInServices.currentUser()!,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text('Loading');
+            }
+
+            Map<String, dynamic> currentuser =
+                snapshot.data?.data() as Map<String, dynamic>;
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 80),
+                  child: CircleAvatar(
+                    radius: 70,
+                    backgroundImage: NetworkImage(currentuser['photourl']),
+                  ),
+                ),
+                Text(currentuser['name']),
+                Text(currentuser['email']),
+                Text(currentuser['phone']??"No Phone"),
+              ],
+            );
+          },
+        ),
+      ),
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Home Screen'),
@@ -69,7 +102,8 @@ class HomeScreen extends StatelessWidget {
 
                         return GestureDetector(
                           onTap: () {
-                            controller.getreceiver(userlist[index]['email']);
+                            controller.getreceiver(userlist[index]['email'],
+                                (userlist[index]['name']));
                             Get.to(ChatScreen());
                           },
                           child: ListTile(

@@ -13,74 +13,105 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthController controller = Get.put(AuthController());
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Chat'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: StreamBuilder(
-                  stream: ChatServices.chatServices.getchat(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text(snapshot.error.toString()),
-                      );
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    var Querydata = snapshot.data!.docs;
-                    List chats = Querydata.map(
-                      (e) => e.data(),
-                    ).toList();
-                    List<Chat> chatlist =
-                        chats.map((e) => Chat.fromMap(e)).toList();
-                    return ListView.builder(
-                      itemCount: chatlist.length,
-                      itemBuilder: (context, index) {
-                      return  Text(
-                          chatlist[index].message!,
 
-                        );
-                      },
+      appBar: AppBar(
+
+        title: Obx(()=> Text(controller.name.value)),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder(
+                stream: ChatServices.chatServices.getchat(
+                    GoogleSignInServices.googleSignInServices.currentUser()!
+                        .email!, controller.receiveremail.value),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
                     );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: controller.txtmessage,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black)),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black)),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        Map<String, dynamic> chatdata = {
-                          'sender': GoogleSignInServices.googleSignInServices
-                              .currentUser()!
-                              .email,
-                          'receiver': controller.receiver.value,
-                          'message': controller.txtmessage.text,
-                          'timestamp': DateTime.now(),
-                        };
-                        controller.txtmessage.clear();
-                        ChatServices.chatServices.insertchat(chatdata);
-                      },
-                      icon: Icon(Icons.send),
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                   var Querydata = snapshot.data!.docs;
+                   List chats = Querydata.map(
+                    (e) => e.data(),
+                  ).toList();
+
+                  List<Chat> chatlist = [];
+
+                  for (var chat in chats) {
+                    chatlist.add(Chat.fromMap(chat));
+                  }
+
+                  return Column(
+                    children: List.generate(
+                      chatlist.length,
+                          (index) =>
+                          Align(
+                            alignment: (chatlist[index].sender ==
+                                GoogleSignInServices.googleSignInServices
+                                    .currentUser()!
+                                    .email
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft),
+                            child: Container(
+                              child: Card(
+
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    chatlist[index].message!,
+
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                     ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: controller.txtmessage,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      Map<String, dynamic> chatdata = {
+                        'sender': GoogleSignInServices.googleSignInServices
+                            .currentUser()!
+                            .email,
+                        'receiver': controller.receiveremail.value,
+                        'message': controller.txtmessage.text,
+                        'timestamp': DateTime.now(),
+                      };
+
+                      ChatServices.chatServices.insertchat(
+                          chatdata,
+                        GoogleSignInServices.googleSignInServices.currentUser()!.email!,
+                          controller.receiveremail.value);
+                      controller.txtmessage.clear();
+                    },
+                    icon: Icon(Icons.send),
                   ),
                 ),
-              )
-            ],
-          ),
-        ),);
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
