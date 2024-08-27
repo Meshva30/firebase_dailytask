@@ -31,4 +31,23 @@ class ChatServices {
         .orderBy('timestamp', descending: false)
         .snapshots();
   }
+
+  Future<void> updateChat(
+      {required String chatid,
+      required String sender,
+      required String receiver,
+      required String message}) async {
+    List doc = [sender, receiver];
+    doc.sort();
+    String docid = doc.join('_');
+   await FirebaseFirestore.instance
+        .collection('Chatroom')
+        .doc(docid)
+        .collection('chat')
+        .doc(chatid)
+        .update({
+
+      'message': message,
+    });
+  }
 }

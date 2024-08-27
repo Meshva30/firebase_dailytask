@@ -13,10 +13,8 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthController controller = Get.put(AuthController());
     return Scaffold(
-
       appBar: AppBar(
-
-        title: Obx(()=> Text(controller.name.value)),
+        title: Obx(() => Text(controller.receivername.value)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -25,8 +23,10 @@ class ChatScreen extends StatelessWidget {
             Expanded(
               child: StreamBuilder(
                 stream: ChatServices.chatServices.getchat(
-                    GoogleSignInServices.googleSignInServices.currentUser()!
-                        .email!, controller.receiveremail.value),
+                    GoogleSignInServices.googleSignInServices
+                        .currentUser()!
+                        .email!,
+                    controller.receiveremail.value),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Center(
@@ -38,9 +38,14 @@ class ChatScreen extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   }
-                   var Querydata = snapshot.data!.docs;
-                   List chats = Querydata.map(
-                    (e) => e.data(),
+                  var Querydata = snapshot.data!.docs;
+                  List chatid = Querydata.map(
+                        (e) => e.id,
+                  ).toList();
+
+                  print('-----------$chatid----------------');
+                  List chats = Querydata.map(
+                        (e) => e.data(),
                   ).toList();
 
                   List<Chat> chatlist = [];
@@ -61,13 +66,46 @@ class ChatScreen extends StatelessWidget {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft),
                             child: Container(
-                              child: Card(
-
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    chatlist[index].message!,
-
+                              child: GestureDetector(
+                                onLongPress: () {
+                                  controller.txtedit = TextEditingController(
+                                      text: chatlist[index].message);
+                                  if (chatlist[index].sender ==
+                                      GoogleSignInServices.googleSignInServices
+                                          .currentUser()!
+                                          .email)
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('edit'),
+                                          content: TextField(
+                                            controller: controller.txtedit,
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: ()  {
+                                                   ChatServices.chatServices
+                                                      .updateChat(
+                                                      chatid: chatid[index],
+                                                      sender: controller.email.value,
+                                                      receiver: controller.receiveremail.value,
+                                                      message: controller
+                                                          .txtedit.text);
+                                                  Get.back();
+                                                },
+                                                child: Text('Edit'))
+                                          ],
+                                        );
+                                      },
+                                    );
+                                },
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      chatlist[index].message!,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -100,7 +138,9 @@ class ChatScreen extends StatelessWidget {
 
                       ChatServices.chatServices.insertchat(
                           chatdata,
-                        GoogleSignInServices.googleSignInServices.currentUser()!.email!,
+                          GoogleSignInServices.googleSignInServices
+                              .currentUser()!
+                              .email!,
                           controller.receiveremail.value);
                       controller.txtmessage.clear();
                     },

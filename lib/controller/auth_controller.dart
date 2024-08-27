@@ -13,6 +13,7 @@ class AuthController extends GetxController {
   TextEditingController txtname = TextEditingController();
   TextEditingController txtphone = TextEditingController();
   TextEditingController txtmessage = TextEditingController();
+  TextEditingController txtedit = TextEditingController();
 
   RxString email = ''.obs;
   RxString name = ''.obs;
@@ -29,7 +30,7 @@ class AuthController extends GetxController {
   }
   void getreceiver(String email,String name) {
     receiveremail.value = email;
-    receivername.value = email;
+    receivername.value = name;
   }
 
   void UserDetails() {
