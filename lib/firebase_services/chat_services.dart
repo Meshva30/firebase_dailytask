@@ -50,4 +50,18 @@ class ChatServices {
       'message': message,
     });
   }
+  Future<void> deleteChat(
+      {required String chatid,
+        required String sender,
+        required String receiver,
+        }) async {
+    List doc = [sender, receiver];
+    doc.sort();
+    String docid = doc.join('_');
+    await FirebaseFirestore.instance
+        .collection('Chatroom')
+        .doc(docid)
+        .collection('chat')
+        .doc(chatid).delete();
+  }
 }

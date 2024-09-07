@@ -1,9 +1,9 @@
 import 'package:chat_app/firebase_services/google_services.dart';
+import 'package:chat_app/firebase_services/notification_services.dart';
 import 'package:chat_app/firebase_services/user_services.dart';
 import 'package:chat_app/screen/chat_screen.dart';
 import 'package:chat_app/screen/signin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -17,6 +17,13 @@ class HomeScreen extends StatelessWidget {
     AuthController controller = Get.put(AuthController());
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // NotificationServices.notificationServices.showNotification();
+          NotificationServices.notificationServices.showScheduleNotification();
+        },
+
+      ),
       drawer: Drawer(
         child: FutureBuilder(
           future: UserServices.userServices.getcurrentuser(
@@ -43,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Text(currentuser['name']),
                 Text(currentuser['email']),
-                Text(currentuser['phone']??"No Phone"),
+                Text(currentuser['phone'] ?? "No Phone"),
               ],
             );
           },

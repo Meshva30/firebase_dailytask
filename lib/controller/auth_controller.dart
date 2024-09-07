@@ -21,14 +21,13 @@ class AuthController extends GetxController {
   RxString receiveremail = ''.obs;
   RxString receivername = ''.obs;
 
-
   @override
   void onInit() {
-
     super.onInit();
     UserDetails();
   }
-  void getreceiver(String email,String name) {
+
+  void getreceiver(String email, String name) {
     receiveremail.value = email;
     receivername.value = name;
   }
@@ -39,7 +38,6 @@ class AuthController extends GetxController {
       email.value = user.email!;
       name.value = user.displayName ?? 'No Name';
       url.value = user.photoURL ?? '';
-
     }
   }
 

@@ -40,12 +40,12 @@ class ChatScreen extends StatelessWidget {
                   }
                   var Querydata = snapshot.data!.docs;
                   List chatid = Querydata.map(
-                        (e) => e.id,
+                    (e) => e.id,
                   ).toList();
 
                   print('-----------$chatid----------------');
                   List chats = Querydata.map(
-                        (e) => e.data(),
+                    (e) => e.data(),
                   ).toList();
 
                   List<Chat> chatlist = [];
@@ -57,60 +57,73 @@ class ChatScreen extends StatelessWidget {
                   return Column(
                     children: List.generate(
                       chatlist.length,
-                          (index) =>
-                          Align(
-                            alignment: (chatlist[index].sender ==
+                      (index) => Align(
+                        alignment: (chatlist[index].sender ==
                                 GoogleSignInServices.googleSignInServices
                                     .currentUser()!
                                     .email
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft),
-                            child: Container(
-                              child: GestureDetector(
-                                onLongPress: () {
-                                  controller.txtedit = TextEditingController(
-                                      text: chatlist[index].message);
-                                  if (chatlist[index].sender ==
-                                      GoogleSignInServices.googleSignInServices
-                                          .currentUser()!
-                                          .email)
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text('edit'),
-                                          content: TextField(
-                                            controller: controller.txtedit,
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: ()  {
-                                                   ChatServices.chatServices
-                                                      .updateChat(
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft),
+                        child: Container(
+                          child: GestureDetector(
+                            onLongPress: () {
+                              controller.txtedit = TextEditingController(
+                                  text: chatlist[index].message);
+                              if (chatlist[index].sender ==
+                                  GoogleSignInServices.googleSignInServices
+                                      .currentUser()!
+                                      .email)
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('edit'),
+                                      content: TextField(
+                                        controller: controller.txtedit,
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              ChatServices.chatServices
+                                                  .updateChat(
                                                       chatid: chatid[index],
-                                                      sender: controller.email.value,
-                                                      receiver: controller.receiveremail.value,
+                                                      sender: controller
+                                                          .email.value,
+                                                      receiver: controller
+                                                          .receiveremail.value,
                                                       message: controller
                                                           .txtedit.text);
-                                                  Get.back();
-                                                },
-                                                child: Text('Edit'))
-                                          ],
-                                        );
-                                      },
+                                              Get.back();
+                                            },
+                                            child: Text('Edit')),
+                                        TextButton(
+                                            onPressed: () {
+                                              ChatServices.chatServices
+                                                  .deleteChat(
+                                                chatid: chatid[index],
+                                                sender: controller.email.value,
+                                                receiver: controller
+                                                    .receiveremail.value,
+                                              );
+                                              Get.back();
+                                            },
+                                            child: Text('Detele'))
+                                      ],
                                     );
-                                },
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      chatlist[index].message!,
-                                    ),
-                                  ),
+                                  },
+                                );
+                            },
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  chatlist[index].message!,
                                 ),
                               ),
                             ),
                           ),
+                        ),
+                      ),
                     ),
                   );
                 },
